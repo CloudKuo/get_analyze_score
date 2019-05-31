@@ -23,9 +23,14 @@ if __name__ == '__main__':
                   '了解小組討論內容的重點，且能給予有助益的建議', '願意讓小組成員了解自己的需要與感受',
                   ]
     score_list = ['非常不同意', '不同意', '中等', '同意', '非常同意']
+    csf = open('output.csv', 'w', newline='', encoding='utf-8')
+    writer = csv.writer(csf)
+    writer.writerow(["評測索引", "new_name", '評論人', "組別", '總分', "受評人"])
+    # csf.close()
     for c in class_name:
         print(c)
         last_file_num = 33
+
         for t in time_name:
             for ff in range(initial_count, last_file_num):
                 print("time_name: ", t, "file_num:", ff+1)
@@ -43,17 +48,27 @@ if __name__ == '__main__':
                             # if row[judged_man] not in dict_student:
                             #     dict_student.update({row[judged_man]: new_name})
                                 print(t)
-                                dict_student[row[judged_man]] = {'new_name': new_name}
+                                dict_student[row[judged_man]] = new_name
                                 student_num += 1
                             else:
                                 pass
                             print(row[judged_man]+':')
+                            person_score = 0
                             for i in topic_list:
                                 # print(row[i])#同一個人的全部評論,橫的
-                                dict_student[row[judged_man]].update({i: row[i]})
-                                print(dict_student.get(row[judged_man]))
+                                if row[i] in score_list:
+                                    # print(score_list.index(row[i])+1)
+                                    person_score = person_score+score_list.index(row[i])+1
+                                # print("--")
+                                # dict_student[row[judged_man]].update({i: row[i]})
+                                # print(dict_student.get(row[judged_man]))
                                 # print(dict_student)
-
+                                #要顧慮到不同class同個名子的問題
+                            num = dict_student.get(row[judged_man])#本名的編號
+                            print("評測索引", t, num, "組別:", ff+1, '總分:', person_score, "受評人: ", row[be_judged_man])
+                            # print(num)
+                            # writer.writerow(["評測索引", "new_name", '評論人', "組別", '總分', "受評人"])
+                            writer.writerow([t, num, row[judged_man], "group"+str(ff+1), person_score, row[be_judged_man]])
                             print('-------------')
 
 
@@ -65,10 +80,11 @@ if __name__ == '__main__':
                             #     print(row[i])
                 except FileNotFoundError:
                     if t == '4th':
-                        initial_count = ff
-                        break
+                        if c != 'class05':
+                            initial_count = ff
+                            break
                     pass
-    write_student(dict_student)
+    # write_student(dict_student)
     print(dict_student)
 
 
