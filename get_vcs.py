@@ -10,7 +10,7 @@ def write_student(dict):
 def first_generate():
     initial_count = 0
     student_num = 0
-    csf = open('output.csv', 'w', newline='', encoding='utf-8')
+    csf = open('output3.csv', 'w', newline='', encoding='utf-8')
     writer = csv.writer(csf)
     writer.writerow(["評測索引", "評論ID", '評論人', "受評人", "受評ID", '主動且積極地參與小組活動', '個別發想的題目具有參考價值',
                   '願意分享自己的想法以及相關的資源等訊息', '願意接受小組的分工安排並負責任完成',
@@ -21,8 +21,9 @@ def first_generate():
     # csf.close()
     for c in class_name:
         print(c)
-        last_file_num = 33
-
+        last_file_num = 48
+        j_name = ''
+        b_name = ''
         for t in time_name:
             for ff in range(0, last_file_num):
                 # print("time_name: ", t, "file_num:", ff + 1)
@@ -37,6 +38,8 @@ def first_generate():
                               encoding='utf-8') as csvfile:
                         rows = csv.DictReader(csvfile)
                         for row in rows:
+                            j_name = row[judged_man]
+                            b_name = row[be_judged_man]
                             new_name = 'student_00' + str(student_num)
                             if dict_student.get(row[judged_man]) == None:
                                 # if row[judged_man] not in dict_student:
@@ -52,16 +55,16 @@ def first_generate():
                             seperate_list = []
                             for i in topic_list:
                                 # print(row[i])#同一個人的全部評論,橫的
-                                if row[i] in score_list:
+                                if row[i] in score_list:#她評分的分數
                                     # print(score_list.index(row[i])+1)
                                     person_score = person_score + score_list.index(row[i]) + 1
                                     seperate_list.append(score_list.index(row[i]) + 1)
                                 # print("--")
                                 # dict_student[row[judged_man]].update({i: row[i]})
                                 # print(dict_student.get(row[judged_man]))
-                                # print(dict_student)
                                 # 要顧慮到不同class同個名子的問題
-                            num = dict_student.get(row[judged_man]).get(file_num) # 本名的編號
+                            num = dict_student.get(j_name).get('group'+file_num)# 本名的編號
+                            # num = dict_student[row[judged_man]].get(file_num)
                             # print("評測索引", t, num, "組別:", ff + 1, '總分:', person_score, "受評人: ", row[be_judged_man])
                             # print(num)
                             # writer.writerow(["評測索引", "new_name", '評論人', "組別", '總分', "受評人"])
@@ -80,23 +83,30 @@ def first_generate():
                     #     else:
                     #         break
                     pass
+                # except KeyError:
+                #     # wrong = open('wrong.txt', 'w+', encoding='utf-8')
+                #     # wrong.write(t+j_name+b_name+str(ff + 1))
+                #     # wrong.close()
+                #     print(t+j_name+b_name+str(ff + 1))
+                # except TypeError:
+                #     pass
     # write_student(dict_student)
     csf.close()
     print(dict_student)
-    s = open('name_relative.csv', 'w', newline='', encoding='utf-8')
+    s = open('name_relative2.csv', 'w', newline='', encoding='utf-8')
     s_w = csv.writer(s)
     s_w.writerow(['True_name', 'Number', 'Group'])
     for name, groups in dict_student.items():
-        print(name)
+        # print(name)
         for group in groups:
-            print(group + ':', groups[group])
+            # print(group + ':', groups[group])
             s_w.writerow([name, groups[group], group])
     s.close()
 
 
 if __name__ == '__main__':
-    class_name = ['class01', 'class02', 'class03', 'class04', 'class05']
-    time_name = ['1st', '2nd', '3rd', '4th']
+    class_name = ['1072Mon', '1072Tue', '1072Wed', '1072Thu', '1072Fri']
+    time_name = ['1st', '2nd', '3rd']
     dict_student = {}
     be_judged_man = "受評者 (請輸入組員的姓名)"
     judged_man = '請輸入自己的姓名'
