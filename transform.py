@@ -14,14 +14,14 @@ if __name__ == '__main__':
     self_list = []
     gr_list = []
     data_dict = {}
-    final_output = open('finaloutput.csv', 'r', encoding='utf-8', newline='')
+    final_output = open('finaloutput2v2.csv', 'r', encoding='utf-8', newline='')
     rows = csv.DictReader(final_output)
     # row1 = next(rows)#第一行
-    data_1 = open('data_1.csv', 'r', encoding='utf-8', newline='')
+    data_1 = open('new_data2.csv', 'r', encoding='utf-8', newline='')
     data_row = csv.DictReader(data_1)
     for data in data_row:
         if data_dict.get(data['Number'], 'n') == 'n':
-            data_dict[data['Number']] = {'Gender': data['Gender'], 'Group Size': data['Group Size'], 'class': data['class']}
+            data_dict[data['Number']] = {'Gender': data['Gender'], 'Group Size': data['GroupSize'], 'class': data['class']}
     # print(data_dict)
     # print(data_dict['student_000'].get('Gender'))
     for row in rows:
@@ -49,7 +49,7 @@ if __name__ == '__main__':
             re_gender_list.append(1)
         gr_size_list.append(data_dict[row['評論ID']].get('Group Size'))
         class_list.append(data_dict[row['評論ID']].get('class'))
-    w = open('transform.csv', 'w', encoding='utf-8', newline='')
+    w = open('transform2.csv', 'w', encoding='utf-8', newline='')
     writer = csv.writer(w)
     writer.writerow(['Score ID', 'Grp ID', 'Ratee ID', 'Rater ID', 'Score', 'Self', 'ReGen', 'SeGen', 'GrpSize', 'Class'])
     for x in range(len(index)):
