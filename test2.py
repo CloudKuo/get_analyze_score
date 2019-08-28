@@ -64,8 +64,7 @@ def change_num():
             pass
     open('name_relative2v2.csv', 'w', encoding='utf-8').write(saveFile)
 
-
-if __name__ == '__main__':
+def ch():
     name2 = open('name_relative2v2.csv', 'r', newline='', encoding='utf-8')
     rows = csv.DictReader(name2)
     name_dict = {}
@@ -96,3 +95,34 @@ if __name__ == '__main__':
         except IndexError:
             pass
     open('finaloutput2v2.csv', 'w', encoding='utf-8').write(saveFile)
+
+
+if __name__ == '__main__':
+    result2 = []
+    ori_output = open('finaloutput2v2.csv', 'r', newline='', encoding='utf-8').read().split('\n')
+    for sent in ori_output:
+        result2.append(sent.split(','))
+    saveFile = '\ufeff'
+    for sent in result2:
+        print(sent)
+        if result2.index(sent) != 0:
+            try:
+                # print(sent[0])
+                sent[21] = int(re.sub('group', '', sent[21]))+32
+                sent[21] = 'group'+str(sent[21])
+                for value in sent:
+                    if sent.index(value) != 22:
+                        saveFile += '%s,' % value
+                    else:
+                        saveFile += value
+            except IndexError:
+                pass
+        else:
+
+            for value in sent:
+                if sent.index(value) != 22:
+                    saveFile += '%s,' % value
+                else:
+                    saveFile += value
+
+    open('finaloutput2v3.csv', 'w', encoding='utf-8').write(saveFile)
